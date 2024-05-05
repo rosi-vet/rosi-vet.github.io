@@ -11,6 +11,7 @@ const readFileSyn = (file) => {
     });
 }
 
+
 const shuffle = (unshuffled) => {
 
     return unshuffled.map(value      => ({ value, sort: Math.random() }))
@@ -18,13 +19,24 @@ const shuffle = (unshuffled) => {
                      .map(({ value }) => value)
 }
 
-
 document.getElementById("inputId").addEventListener('change', async (e) => {
+
+    const fileTitle     = (e.target.files[0].name).split('.');
+    const fileExtention = fileTitle[fileTitle.length - 1];
+
+    console.log(fileExtention);
+
+    if(fileExtention != 'csv') {
+        document.getElementById('warn').style.display = "block";
+        return;
+    }
+    else {
+        document.getElementById('warn').style.display = "none";
+    }
 
     const content   = await readFileSyn(e.target.files[0]);
     const data      = content.split('\r\n');
     const resultData = shuffle(data);
-
 
     const workbook  = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("AA");
